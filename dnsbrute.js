@@ -57,14 +57,12 @@ async function main() {
       "providers.wordlist.merged.txt"
     );
 
-    // ShuffleDNS providers.gen_subs.txt (providers + wordlist generated subdomains)
+    // shuffleDNS  (providers + resovled providers + wordlist subdomains)
     await shuffleDNS(
       domain,
       "providers.wordlist.merged.txt",
       "resolved.providers.wordlist.merged.txt"
     );
-
-    // DNSGEN for resolved parts of providers + wordlist merged result
 
     // merging providers.merged.txt and resolved.providers.wordlist.merged.txt
     uniquefyFiles(
@@ -72,7 +70,10 @@ async function main() {
       "final.merge.txt"
     );
 
-    dnsgen("final.merge.txt", "dnsgen.result.txt");
+    // dnsgen for resolved parts of providers + wordlist merged result
+    await dnsgen("final.merge.txt", "dnsgen.result.txt");
+
+    await shuffleDNS(domain, "dnsgen.result.txt", `$final.${domain}.subs`);
 
     subdomainProviders.map((subdomainProvider) => {
       if (fs.existsSync(subdomainProvider)) {
