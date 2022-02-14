@@ -35,7 +35,7 @@ console.log(wordlist);
 
 async function main() {
   try {
-    const wordlistSubFileName = await subdomainGenerator(domain, `./wordlist`);
+    const wordlistSubFileName = await subdomainGenerator(domain, wordlist);
     const abuseipdbFileName = await abuseipdb(domain);
     const crtshFileName = await crtsh(domain);
     const subfinderFileName = await subfinder(domain);

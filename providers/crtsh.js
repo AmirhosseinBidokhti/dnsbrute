@@ -1,5 +1,4 @@
 import { execWrapper } from "../utilities/execWrapper.js";
-import color from "color";
 import chalk from "chalk";
 
 async function crtsh(domain) {
