@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/AmirhosseinBidokhti/dnsbrute/issues"
   },
-  "homepage": "https://github.com/AmirhosseinBidokhti/dnsbrute#readme"
+  "homepage": "https://github.com/AmirhosseinBidokhti/dnsbrute#readme",
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "commander": "^9.0.0"
+  }
 }
