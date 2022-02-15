@@ -8,9 +8,8 @@ import { abuseipdb } from "./providers/abuseipdb.js";
 import { crtsh } from "./providers/crtsh.js";
 import { subfinder } from "./providers/subfinder.js";
 
-const subdomainProviders = [];
-
 import { Command } from "commander";
+import chalk from "chalk";
 const program = new Command();
 
 program
@@ -30,8 +29,8 @@ program.parse();
 const domain = program.opts().domain;
 const wordlist = program.opts().wordlist;
 
-console.log(domain);
-console.log(wordlist);
+const subdomainProviders = [];
+const toBeDeletedFiles = [];
 
 async function main() {
   try {
@@ -70,21 +69,36 @@ async function main() {
       "final.merge.txt"
     );
 
+    toBeDeletedFiles.push(
+      "providers.merged.txt",
+      "resolved.providers.wordlist.merged.txt"
+    );
+
     // dnsgen for resolved parts of providers + wordlist merged result
     await dnsgen("final.merge.txt", "dnsgen.result.txt");
 
-    await shuffleDNS(domain, "dnsgen.result.txt", `$final.${domain}.subs`);
+    console.log(
+      chalk.bgWhite.black.underline(
+        "[+] Running shuffleDNS on the final dnsgen result. This might take a minute or so"
+      )
+    );
+    await shuffleDNS(domain, "dnsgen.result.txt", `final.${domain}.subs`);
 
-    subdomainProviders.map((subdomainProvider) => {
-      if (fs.existsSync(subdomainProvider)) {
+    toBeDeletedFiles.push("dnsgen.result.txt", "final.merge.txt");
+    toBeDeletedFiles.push(...subdomainProviders, wordlistSubFileName);
+    toBeDeletedFiles.push("providers.wordlist.merged.txt");
+
+    toBeDeletedFiles.map((file) => {
+      if (fs.existsSync(file)) {
         // path exists so delete it
-        fs.unlinkSync(subdomainProvider);
+        fs.unlinkSync(file);
       }
     });
   } catch (error) {
     console.log(error);
   }
 }
+// TODO: also merge the Resoved ones form the eariler shuffledns opeartion with the final shuffle of dnsgen
 
 //await dnsgen("resolve_1.txt");
 
